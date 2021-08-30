@@ -7,7 +7,42 @@ class Despesa {
         this.descricao = descricao
         this.valor = valor
     }
+
+    validarDados() {
+        for(let i in this) {
+            if (this[i] == null || this[i] == undefined || this[i] == '') {
+                return false
+            }
+        }
+        return true
+    }
 }
+
+class BD {
+
+    constructor() {
+        let id = localStorage.getItem('id')
+
+        if (id === null) {
+            localStorage.setItem('id', 0)
+        }
+    }
+
+    getProximoId() {
+        let proximoId = localStorage.getItem('id')
+        return parseInt(proximoId) + 1
+    }
+
+    gravar(despesa) {
+        let id = this.getProximoId()
+
+        localStorage.setItem(id, JSON.stringify(despesa))
+
+        localStorage.setItem('id', id)
+    }
+}
+
+let bd = new BD()
 
 function cadastrarDespesa() {
     
@@ -27,9 +62,11 @@ function cadastrarDespesa() {
         valor.value
     )
 
-    gravar(despesa)
+    if (despesa.validarDados()) {
+        console.log('Dados válidos')
+    } else {
+        console.log('Dados inválidos')
+    }
+
 }
 
-function gravar(despesa) {
-    localStorage.setItem('despesa', JSON.stringify(despesa))
-}
